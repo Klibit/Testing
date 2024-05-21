@@ -90,13 +90,32 @@ import "bootstrap/dist/css/bootsrtrap.min.css";
 import PropTypes from "prop-types";
 
 function BookCard(props) {
+    const url = "http://localhost:8000/api/books";
     const {book} = props
+
+    const rent = async() => {
+        const response = await fetch(url + "/" + books.id + "/rent", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
+        if(response.ok){
+            alert("Sikeres foglalás");
+        } else {
+            const data = await response.json();
+            alert(data.message);
+        }
+
+    }
+
     return ( <div className="col">
         <div classname="card" >
             <div className="card-body"></div>
             <h2>{book.title}</h2>
             <p>Kiadási év:</p>
             <img src={"szerzoik/"+book.author+".jpg" } alt={book.author} />
+            <button className="btn" onClick={() => rent()}>Kölcsönzés</button>
         </div>
     </div>
 
@@ -106,8 +125,8 @@ function BookCard(props) {
 BookCard.propTypes = {
     book: PropTypes.object.isRequired
 }
-export default BookCard;
 
+export default BookCard;
 
 #App
 import { useEffect, useState } from 'react'
