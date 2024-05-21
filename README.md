@@ -102,6 +102,13 @@ function BookCard(props) {
 
      );
 }
+
+BookCard.propTypes = {
+    book: PropTypes.object.isRequired
+}
+export default BookCard;
+
+
 #App
 import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
@@ -134,7 +141,7 @@ function App() {
       {books.map(book => <BookCard key={book.id} book={book}/>)}
     </div>
     <div className="mt-3" id="newbook">
-
+    <BookForm onSucces={readAllBooks} />
     </div>
 
   </main>
@@ -144,16 +151,59 @@ function App() {
     </>
   )
 }
-
 export default App
 
+#Bookform:
+import PropTypes from "prop-types";
 
+function BookForm(props) {
+    const {onSucces} = props;
+    const titleRef = useRef(null);
+    const url = "http://localhost:8000/api/books";
 
-BookCard.propTypes = {
-    book: PropTypes.object.isRequired
+    const handleSubmit = event =>{
+        event.preventDefaul();
+        createBook();
+        onSuccess();
+    }
+
+   const createBook = async() => {
+        const book = {
+            title : titleRef.current.value
+        }
+        const response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(book),
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
+        })
+        if (response.ok){
+            onSuccess()
+        } else {
+            const data = response.json();
+        }
+        
+    }
+    return ( 
+        <form onSubmit={handleSubmit}>
+            <h2>Új könyv</h2>
+            <div className="mb-3">
+            <label htmlFor="title" className="form-label">Cím</label>
+            <input type="text" id="title" className="form-control" ref={titleRef}/>
+            </div>
+
+            <button type="submit">Új Könyv</button>
+        </form>
+     );
 }
 
-export default BookCard;
+BookForm.PropTypes = {
+    onSucces: PropTypes.func.isRequired
+}
+
+export default BookForm;
 
 
 ###############################
