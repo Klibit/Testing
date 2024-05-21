@@ -226,69 +226,58 @@ export default BookForm;
 
 
 ###############################
+program.cs-ben: Mstatic void Main(string[] args) { if args.Contains("--stat")){Statistic.Run}else{applications....}}
 Csc
+#Book.cs:
+int id;
+string title;
+string authro;
+
+#BookService
+project-managenuget-mysql.data
+
+private static string DB_HOST = "localhost;
+private static string DB_USER = "root";
+private static string DB_PASSWORD = "";
+private static string DB_DBNAME = "vizsga";
+private MySqlConnection connection;
+
+public BookService(){
+MysqlConnectionStringBuilder builder  = new MysqlConnectionStringBuilder();
+builder.Server = DB_HOST;
+builder.UserID = DB_USER;
+builder.Password = DB_PASSWORD
+
+this.connection = new MySQLConnection(builder.ConnectionString);
+this.connection.Open();
+}
+
+public List<Book> GetBooks(){
+List<Book> list = new List<Book>();
+string sql = "SELECT * FROM books"
+MySQlCommand cmd = this.connection.CreateCOmmand();
+cmd.commandText = sql;
+using(MySqlDataReader reader  = cmd.ExecuteReader()){
+    while(reader.Reaad(){
+    int id = reader.GetInt32("id")
+    string title = reader.GetString("title")
+    string author = reader.GetString("author")
+    Book book = new Book(id, title, author)
+    list.Add(book);
+}
+}
+return list
+}
+
+
+#Statistic
+internal static class Statistic
+    static List<Book> books;
+public static void Run(){
+ Console.WriteLide("Statisztika")
+}
+
 
 
 ###############################
 Csg
-
-
-
-import PropTypes from "prop-types";
-
-function BookCard(props) {
-    const {book} = props;
-    return (
-        <div className="col card">
-            <div card-body>
-                <h2>{book.title}</h2>
-            </div>
-        </div>
-    );
-}
-
-BookVard.proptypes = {
-    book: PropTypes.object.isRequired
-}
-
-export default BookCard;
-
-_________________
-
-import { useEffect, useState } from 'react'
-import './App.css'
-import "bootsrtrap/dist/css/bootstrap.css"
-import BookCard from '../../BookCard';
-
-function App() {
-const [books, setBooks] = useState([]);
-const url = "localhost:8000/api/books"
-
-const readAllBooks = () => {
-  const response = await fetch(url);
-  const data = await response.json();
-  setBooks(data.data);
-
-}
-
-useEffect(() => {
-  readAllBooks();
-}, []);
-
-
-  return (
-    <>
-        <header>
-    <nav></nav>
-    <h1>Petrik könyvtár</h1>
-    </header>
-    <main className='container'>
-      <div className='row'>
-        {books.map(book => <BookCard key={book.id} book={book}/>)}
-
-      </div>
-
-    </main>
-    </>
-
-    #BE
